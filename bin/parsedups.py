@@ -192,16 +192,11 @@ def parse_args():
 
     args = parser.parse_args()
 
-    files = args.file
-    field_separator = args.field_separator
-    list_fields = args.list_fields
-    size = args.size
-
     return {
-                'field_separator': field_separator,
-                'files': files,
-                'list_fields': list_fields,
-                'size': int(size),
+                'field_separator': args.field_separator,
+                'files': args.file,
+                'list_fields': args.list_fields,
+                'size': int(args.size),
            }
 
 
