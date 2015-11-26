@@ -92,14 +92,14 @@ manna.local  cc3d2cd6b035dc31b2614c1df204848e      308434    18419933  venv/lib/
 We see that there are no duplicates 100,000 bytes or more in size:
 
 ```
-$ ~/projects/bizcor/duplicates/bin/dupscan.py -d venv | ~/projects/bizcor/duplicates/bin/parsedups.py --size 100000
+$ dupscan.py -d venv | parsedups.py --size 100000
 parsedups.py: args => {'files': [], 'list_fields': False, 'size': 100000, 'field_separator': '\x00'}
 ```
 
 But there are some 10,000 bytes or more:
 
 ```
-$ ~/projects/bizcor/duplicates/bin/dupscan.py -d venv | ~/projects/bizcor/duplicates/bin/parsedups.py --size 10000
+$ dupscan.py -d venv | parsedups.py --size 10000
 parsedups.py: args => {'files': [], 'list_fields': False, 'size': 10000, 'field_separator': '\x00'}
 manna.local  4ffe71fb39c0bec005ef454f84403a35       28079    18419350  venv/lib/python2.7/site-packages/pkg_resources/_vendor/packaging/specifiers.py
 manna.local  4ffe71fb39c0bec005ef454f84403a35       28079    18419906  venv/lib/python2.7/site-packages/pip/_vendor/packaging/specifiers.py
