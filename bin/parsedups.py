@@ -25,6 +25,8 @@ DEFAULT_SIZE = 0
 
 EXPECTED_NUMBER_OF_DATA_FIELDS = 7
 
+COMMAND_LINE_STDIN_SYMBOL = '__stdin__'
+
 
 def print_scanned_data(dupdata):
     ''' this may or may not currently be called by anything in this
@@ -53,6 +55,9 @@ def parse_data(files, field_separator):
         of dicts of dicts... data structure containing all of the parsed
         data.  see comments below for the layout of the data.
     '''
+    if len(files) == 0:
+        files = [COMMAND_LINE_STDIN_SYMBOL]
+
     if field_separator in string.printable:
         printable_separator = field_separator
     else:
@@ -62,8 +67,13 @@ def parse_data(files, field_separator):
     dupdata = {}
 
     for file in files:
+        if file == COMMAND_LINE_STDIN_SYMBOL:
+            input = sys.stdin
+        else:
+            input = open(file, 'rb')
+
         line_number = 0
-        with open(file, 'rb') as f:
+        with input as f:
             for line in f:
                 line_number += 1
                 line = line.rstrip('\n')
@@ -164,11 +174,16 @@ def parse_args():
                    ' about each regular file')
     parser = argparse.ArgumentParser(description=description)
 
+    help=(
+        'File(s) from which to read data.  The default is to read from stdin.'
+        '  To mix stdin and files, specify stdin as a file called "__stdin__".'
+        '  For example:  --file __stdin__ --file my-file --file my-other-file'
+    )
     parser.add_argument('--file',
                         '-f',
                         action='append',
-                        required=True,
-                        help='File from which to read data')
+                        default=[],
+                        help=help)
 
     help = ('Specify the string to use as a field separator in output.'
             '  The default is the ascii nul character.')
@@ -202,7 +217,7 @@ def parse_args():
 
 def main():
     options = parse_args()
-    sys.stderr.write("args => {}\n".format(options))
+    sys.stderr.write("{}: args => {}\n".format(os.path.basename(sys.argv[0]), options))
 
     field_separator, files, list_fields, size \
         = options['field_separator'], options['files'], \

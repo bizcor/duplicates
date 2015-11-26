@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import os
+import stat
 import sys
 
 from platform import node
@@ -53,7 +54,7 @@ def file_info(thishost, directory, basename, field_separator=ASCII_NUL):
 def getargs():
     '''parse command line args'''
     description = (
-        'scan files in a tree and print a line of information about'
+        'scan files in a tree and print to stdout a line of information about'
         ' each regular file'
     )
     parser = argparse.ArgumentParser(description=description)
@@ -76,6 +77,7 @@ def getargs():
 
 def main():
     args = getargs()
+
     start_directory = args.start_directory.rstrip('/')
     field_separator = args.field_separator
 
@@ -87,6 +89,12 @@ def main():
     for directory_path, directory_names, file_names \
             in os.walk(start_directory):
         for file_name in file_names:
+            path = '{}/{}'.format(directory_path, file_name)
+
+            mode = os.lstat(path).st_mode
+            if stat.S_ISLNK(mode) or not stat.S_ISREG(mode):
+                continue
+
             print file_info(thishost,
                             directory_path,
                             file_name,
