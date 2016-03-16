@@ -144,7 +144,8 @@ def parse_data(files, field_separator):
     return dupdata
 
 
-def process_data(dupdata, minimum_size=0, list_fields=False):
+def process_data(dupdata, minimum_size=0, list_fields=False,
+                 suppress_vertical_whitespace=False):
     ''' either print duplicates that are found (list_fields=False) or just
         print data on all of the files (list_fields=True).  in either case,
         print data only on files at least as big as minimum_size (in bytes).
@@ -156,10 +157,15 @@ def process_data(dupdata, minimum_size=0, list_fields=False):
     for host in dupdata:
         for fsdev in dupdata[host]:
             for md5sum in dupdata[host][fsdev]:
+                vertical_whitespace_printed = False
                 number_of_inodes = len(dupdata[host][fsdev][md5sum]['inodes'])
                 if number_of_inodes >= NUMBER_OF_INODES_TO_PRINT:
                     size = dupdata[host][fsdev][md5sum]['size']
                     if size >= minimum_size:
+                        if not suppress_vertical_whitespace \
+                                and not vertical_whitespace_printed:
+                            print ""
+                            vertical_whitespace_printed = True
                         for inode in dupdata[host][fsdev][md5sum]['inodes']:
                             for path in dupdata[
                                     host][fsdev][md5sum]['inodes'][inode]:
@@ -174,7 +180,7 @@ def parse_args():
                    ' about each regular file')
     parser = argparse.ArgumentParser(description=description)
 
-    help=(
+    help = (
         'File(s) from which to read data.  The default is to read from stdin.'
         '  To mix stdin and files, specify stdin as a file called "__stdin__".'
         '  For example:  --file __stdin__ --file my-file --file my-other-file'
@@ -205,27 +211,37 @@ def parse_args():
                         default=False,
                         help=help)
 
+    help = '''Do not print vertical whitespace between groups of duplicates'''
+    parser.add_argument('--suppress-vertical-whitespace', '-V',
+                        action="store_true",
+                        dest='suppress_vertical_whitespace',
+                        default=False,
+                        help=help)
+
     args = parser.parse_args()
 
     return {
-                'field_separator': args.field_separator,
-                'files': args.file,
-                'list_fields': args.list_fields,
-                'size': int(args.size),
-           }
+        'field_separator': args.field_separator,
+        'files': args.file,
+        'list_fields': args.list_fields,
+        'size': int(args.size),
+        'suppress_vertical_whitespace': args.suppress_vertical_whitespace,
+    }
 
 
 def main():
     options = parse_args()
-    sys.stderr.write("{}: args => {}\n".format(os.path.basename(sys.argv[0]), options))
+    sys.stderr.write("{}: args => {}\n".format(os.path.basename(sys.argv[0]),
+                                               options))
 
-    field_separator, files, list_fields, size \
+    field_separator, files, list_fields, size, suppress_vertical_whitespace \
         = options['field_separator'], options['files'], \
-        options['list_fields'], options['size']
+        options['list_fields'], options['size'], \
+        options['suppress_vertical_whitespace']
 
     dupdata = parse_data(files, field_separator)
 
-    process_data(dupdata, size, list_fields)
+    process_data(dupdata, size, list_fields, suppress_vertical_whitespace)
 
 
 if __name__ == "__main__":
