@@ -176,8 +176,8 @@ def process_data(dupdata, minimum_size=0, list_fields=False,
 
 def parse_args():
     '''parse command line args'''
-    description = ('scan files in a tree and print a line of information'
-                   ' about each regular file')
+    description = ('scan parsed duplicates data and group files'
+                   ' in output with the same md5sum')
     parser = argparse.ArgumentParser(description=description)
 
     help = (
