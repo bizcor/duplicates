@@ -9,7 +9,7 @@ The idea is to scan one or more filesystem trees and then parse the data, report
 
 **dupscan.py** scans a filesystem tree rooted at the given directory, or rooted at the current working directory if no directory is specified.  It traverses the tree processing regular files.  For each such file it encounters, it writes to stdout a line of data that is formatted as follows.  I show the string ' : ' as a field delimiter here for readability, but the default delimiter is an ascii nul character (\0).
 
-*HOSTNAME : MD5_CHECKSUM : FILESYSTEM_DEVICE_NUMBER : INODE_NUMBER : SIZE_IN_BYTES : PATH*
+*HOSTNAME : MD5_CHECKSUM : FILESYSTEM_DEVICE_NUMBER : INODE_NUMBER : HARD_LINKS : SIZE_IN_BYTES : PATH*
 
 ```
 usage: dupscan.py [-h] [-d START_DIRECTORY] [-s FIELD_SEPARATOR]
