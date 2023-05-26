@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import argparse
 import hashlib
@@ -20,10 +20,10 @@ def md5_for_file(path):
             try:
                 data = f.read()
             except Exception as e:
-                print "{}: could not read file: got {}".format(path, e)
+                print("{}: could not read file: got {}".format(path, e))
             md5.update(data)
     except Exception as e:
-        print "before return true loop: {}: got {}".format(path, e)
+        print("before return true loop: {}: got {}".format(path, e))
     return md5.hexdigest()
 
 
@@ -95,10 +95,10 @@ def main():
             if stat.S_ISLNK(mode) or not stat.S_ISREG(mode):
                 continue
 
-            print file_info(thishost,
+            print(file_info(thishost,
                             directory_path,
                             file_name,
-                            field_separator)
+                            field_separator))
 
 if __name__ == "__main__":
     main()

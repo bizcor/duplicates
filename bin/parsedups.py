@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import argparse
 import os
@@ -34,19 +34,19 @@ def print_scanned_data(dupdata):
         each field to a line
     '''
     for host in dupdata:
-        print "host => {}".format(host)
+        print("host => {}".format(host))
         for fsdev in dupdata[host]:
-            print "  fsdev => {}".format(fsdev)
+            print("  fsdev => {}".format(fsdev))
             for md5sum in dupdata[host][fsdev]:
-                print "    md5sum => {}".format(md5sum)
-                print "      size => {}".format(dupdata[host]
+                print("    md5sum => {}".format(md5sum))
+                print("      size => {}".format(dupdata[host]
                                                        [fsdev]
                                                        [md5sum]
-                                                       ['size'])
+                                                       ['size']))
                 for inode in dupdata[host][fsdev][md5sum]['inodes']:
-                    print "      inode => {}".format(inode)
+                    print("      inode => {}".format(inode))
                     for path in dupdata[host][fsdev][md5sum]['inodes'][inode]:
-                        print "        path => {}".format(path)
+                        print("        path => {}".format(path))
 
 
 def parse_data(files, field_separator):
@@ -164,13 +164,13 @@ def process_data(dupdata, minimum_size=0, list_fields=False,
                     if size >= minimum_size:
                         if not suppress_vertical_whitespace \
                                 and not vertical_whitespace_printed:
-                            print ""
+                            print("")
                             vertical_whitespace_printed = True
                         for inode in dupdata[host][fsdev][md5sum]['inodes']:
                             for path in dupdata[
                                     host][fsdev][md5sum]['inodes'][inode]:
-                                print "{}  {}  {:10d}  {:>10s}  {}".format(
-                                    host, md5sum, size, inode, path)
+                                print("{}  {}  {:10d}  {:>10s}  {}".format(
+                                    host, md5sum, size, inode, path))
     return
 
 
