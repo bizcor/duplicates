@@ -32,7 +32,7 @@ optional arguments:
 usage: parsedups.py [-h] [--file FILE] [--field-separator FIELD_SEPARATOR]
                     [--size SIZE] [--list-fields]
 
-scan files in a tree and print a line of information about each regular file
+scan parsed duplicates data and group files in output with the same md5sum
 
 optional arguments:
   -h, --help            show this help message and exit
