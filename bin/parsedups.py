@@ -76,6 +76,7 @@ def parse_data(files, field_separator):
         with input as f:
             for line in f:
                 line_number += 1
+                line = line.decode("utf-8")
                 line = line.rstrip('\n')
                 if line == 'None':
                     continue
